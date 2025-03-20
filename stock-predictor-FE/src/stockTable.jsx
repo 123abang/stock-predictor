@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { motion, AnimatePresence } from 'framer-motion';
+// import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpCircle, ArrowDownCircle, Search, DollarSign, TrendingUp, BarChart3 } from 'lucide-react';
-import * as Tabs from '@radix-ui/react-tabs';
-import { Card } from './card';
-import { Input } from './input';
-import { Button } from './button';
-import { Table } from './table';
+// import * as Tabs from '@radix-ui/react-tabs';
+// import { Card } from './card';
+// import { Input } from './input';
+// import { Button } from './button';
+// import { Table } from './table';
 import StockChart from './stockChart';
 
 
