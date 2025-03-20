@@ -109,6 +109,16 @@ class StockPredictor:
         
         X = df[feature_columns]
         y = df['target']
+
+           # ✅ Fix 2: Prevent training on an empty dataset
+        if X.empty:
+            print(f"❌ Not enough data to train model for {symbol}")
+            return None
+
+    # ✅ Fix 3: Ensure MinMaxScaler does not fail
+        if len(X) < 2:
+            print(f"❌ Not enough data points to scale for {symbol}")
+            return None
         
         # Scale features
         X_scaled = self.scaler.fit_transform(X)
@@ -322,5 +332,9 @@ def predict_stock(ticker):
         
     return jsonify(prediction_results)
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
+#     app.run(debug=True)
+if __name__ == "__main__":
+    from werkzeug.middleware.proxy_fix import ProxyFix
+    app.wsgi_app = ProxyFix(app.wsgi_app)
     app.run(debug=True)

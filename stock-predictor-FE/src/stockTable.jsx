@@ -13,6 +13,7 @@ import StockChart from './stockChart';
 const TypewriterText = ({ text, className, delay = 0 }) => {
     const [displayedText, setDisplayedText] = useState('');
     const [currentIndex, setCurrentIndex] = useState(0);
+
   
     useEffect(() => {
         if (currentIndex < text.length) {
@@ -43,12 +44,16 @@ const StockTable = () => {
     const [search, setSearch] = useState('');
     const [selectedStock, setSelectedStock] = useState(null);
     const [stockDetails, setStockDetails] = useState(null);
+    const [stockPredictions, setStockPredictions] = useState(null);  // ✅ Fixed: Defined state
+
 
     useEffect(() => {
         const fetchStocks = async () => {
             try {
                 const response = await axios.get('http://127.0.0.1:5000/api/stocks');
                 setStocks(response.data);
+
+
             } catch (error) {
                 console.error('Error fetching stock data:', error);
             }
@@ -64,8 +69,13 @@ const StockTable = () => {
         try {
             const detailResponse = await axios.get(`http://127.0.0.1:5000/api/stock/${ticker}/details`);
             setStockDetails(detailResponse.data);
+
             const chartResponse = await axios.get(`http://127.0.0.1:5000/api/stock/${ticker}`);
             setSelectedStock(chartResponse.data);
+            
+            const predictionResponse = await axios.get(`http://127.0.0.1:5000/api/stock/${ticker}/predict`);
+            setStockPredictions(predictionResponse.data);
+
         } catch (error) {
             console.error('Error fetching stock details:', error);
         }
@@ -232,6 +242,37 @@ const StockTable = () => {
                         </div>
                     </motion.div>
                 )}
+                                {/* PREDICTIONS & AI-INSIGHTS */}
+                                {stockPredictions && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-8 bg-white p-6 rounded-xl shadow-lg"
+                    >
+                        <h3 className="text-2xl font-bold text-gray-800 mb-4">Predicted Future Prices</h3>
+                        <ul className="grid grid-cols-2 gap-4">
+                            {stockPredictions.predictions.slice(0, 5).map((prediction, index) => (
+                                <li key={index} className="p-4 bg-gray-50 rounded-lg">
+                                    <p className="text-sm text-gray-500">{prediction.date}</p>
+                                    <p className="text-lg font-bold text-gray-800">${prediction.price.toFixed(2)}</p>
+                                </li>
+                            ))}
+                        </ul>
+
+                        {/* Display AI-driven insights (Rise/Dip Analysis) */}
+                        <h3 className="text-xl font-bold text-gray-800 mt-6">AI Insights</h3>
+                        {stockPredictions.trends.length > 0 ? (
+                            stockPredictions.trends.map((trend, index) => (
+                                <p key={index} className={`text-lg mt-2 ${trend.type === 'RISE' ? 'text-green-600' : 'text-red-600'}`}>
+                                    {trend.date}: {trend.type} of {trend.change}% - Predicted Price: ${trend.price}
+                                </p>
+                            ))
+                        ) : (
+                            <p className="text-gray-600 mt-2">No significant trends detected.</p>
+                        )}
+                    </motion.div>
+                )}
+                
             </motion.div>
         </div>
     );
