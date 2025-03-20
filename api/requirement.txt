@@ -1,7 +1,7 @@
 CORS
 load_dotenv
-requests
-Flask
+requests==2.26.0
+Flask==2.0.1
 pd
 nd
 inMaxScaler
@@ -10,3 +10,4 @@ LinearRegression
 KNeighborsRegressor
 timedelta
 gunicorn
+scikit-learn==0.24.2
