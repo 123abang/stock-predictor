@@ -118,7 +118,7 @@ const StockTable = () => {
                 >
                   <DollarSign className="w-8 h-8 text-green-600 mr-3" />
                   <div>
-                    <p className="text-sm text-green-600">Market Cap</p>
+                    <p className="text-sm text-green-600">Market Caps</p>
                     <p className="text-xl font-bold text-green-800">$2.4T</p>
                   </div>
                 </motion.div>
